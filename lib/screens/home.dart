@@ -1,36 +1,62 @@
 import 'package:flutter/material.dart';
-import '../repo/data_from_api.dart';
-import '../models/datasplit.dart';
-import '../widgets/datatile.dart';
+import '../repository/data_repo.dart';
+import '../models/data.dart';
+import '../widgets/data_tile.dart';
+import 'package:http/http.dart' as http;
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
+class MyHomePage extends StatelessWidget {
+  final String title;
 
-class _HomeState extends State<Home> {
-  List<Bike> _stations = <Bike>[];
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
-  void initState() {
-    super.initState();
-    getApiData();
-  }
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: FutureBuilder<List<Data>>(
+        future: fetchData(http.Client()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Data List of Bike stations-NYC'),
-        ),
-        body: ListView.builder(
-          itemCount: _stations.length,
-          itemBuilder: (context, index) => DataTile(_stations[index]),
-        ),
-      );
-
-  void getApiData() async {
-    final Stream<Bike> stream = await getStations();
-    stream.listen((Bike bike) => setState(() => _stations.add(bike)));
+          return snapshot.hasData
+              ? DatasList(datas: snapshot.data)
+              : Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
 }
+
+// class Home extends StatefulWidget {
+//   @override
+//   _HomeState createState() => _HomeState();
+// }
+
+// class _HomeState extends State<Home> {
+//   List<Data> _datas = <Data>[];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     listenForBeers();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) => Scaffold(
+//         appBar: AppBar(
+//           centerTitle: true,
+//           title: Text('Top Beers'),
+//         ),
+//         body: ListView.builder(
+//           itemCount: _beers.length,
+//           itemBuilder: (context, index) => BeerTile(_beers[index]),
+//         ),
+//       );
+
+//   void listenForBeers() async {
+//     final Stream<Data> stream = await getBeers();
+//     stream.listen((Beer beer) => setState(() => _beers.add(beer)));
+//   }
+// }
