@@ -11,7 +11,10 @@ class DatasList extends StatelessWidget {
     return ListView.builder(
         itemCount: datas.length,
         itemBuilder: (context, index) {
-          return Text(datas[index].stationName);
+          return (ListTile(
+            title: Text(datas[index].stationName),
+            subtitle: Text(datas[index].statusValue),
+          ));
         });
   }
 }

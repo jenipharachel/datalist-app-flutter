@@ -6,7 +6,7 @@ import '../models/data.dart';
 Future<List<Data>> fetchData(http.Client client) async {
   final response =
       await client.get('https://feeds.citibikenyc.com/stations/stations.json');
-
+  print(response);
   // Use the compute function to run parseData in a separate isolate.
   return compute(parseData, response.body);
 }
