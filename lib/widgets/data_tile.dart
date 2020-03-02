@@ -4,7 +4,7 @@ import '../models/data.dart';
 class DatasList extends StatelessWidget {
   final List<Data> datas;
 
-  DatasList({Key key, this.datas}) : super(key: key);
+  DatasList(Data data, {Key key, this.datas}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
